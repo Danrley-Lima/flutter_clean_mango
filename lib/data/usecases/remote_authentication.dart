@@ -6,13 +6,13 @@ import '../../domain/helpers/helpers.dart';
 import '../../domain/usecases/authetication.dart';
 import '../http/http.dart';
 
-class RemoteAuthentication {
+class RemoteAuthentication implements Authentication {
   final HttpClient httpClient;
   final String url;
 
   RemoteAuthentication({@required this.httpClient, @required this.url});
 
-  Future<AccountEntity> auth(AuthenticationParams params) async {
+  Future<AccountEntity> auth({AuthenticationParams params}) async {
     final body = RemoteAuthenticationParams.fromDomain(params).toJson();
     try {
       final httpResponse =
