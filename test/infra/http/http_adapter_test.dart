@@ -22,7 +22,14 @@ class HttpAdapter {
       'content-type': 'application/json',
       'accept': 'application/json',
     };
-    await client.post(url, headers: headers, body: jsonEncode(body));
+
+    final jsonBody = body != null ? jsonEncode(body) : null;
+
+    await client.post(
+      url,
+      headers: headers,
+      body: jsonBody,
+    );
   }
 }
 
@@ -39,10 +46,6 @@ void main() {
 
   group('post', () {
     test('Should call post with correct values', () async {
-      final client = ClientSpy();
-      final sut = HttpAdapter(client);
-      final url = faker.internet.httpUrl();
-
       await sut.request(
         url: url,
         method: 'post',
@@ -57,6 +60,22 @@ void main() {
             'accept': 'application/json',
           },
           body: '{"any_key":"any_value"}',
+        ),
+      );
+    });
+  });
+
+  group('post', () {
+    test('Should call post without body', () async {
+      await sut.request(
+        url: url,
+        method: 'post',
+      );
+
+      verify(
+        client.post(
+          any,
+          headers: anyNamed("headers"),
         ),
       );
     });
